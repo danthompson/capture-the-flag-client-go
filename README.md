@@ -17,10 +17,7 @@ For more information, please visit [https://testdouble.com](https://testdouble.c
 Install the following dependencies:
 
 ```shell
-go get github.com/stretchr/testify/assert
-go get golang.org/x/oauth2
-go get golang.org/x/net/context
-go get github.com/antihax/optional
+go get -u github.com/danthompson/capture-the-flag-client-go
 ```
 
 Put the package under your project folder and add the following in import:
@@ -29,9 +26,35 @@ Put the package under your project folder and add the following in import:
 import "github.com/danthompson/capture-the-flag-client-go/game_client"
 ```
 
+## Getting Started
+
+```golang
+package main
+import (
+	"context"
+	"fmt"
+	game "github.com/danthompson/capture-the-flag-client-go"
+)
+func main() {
+	config := game.NewConfiguration()
+	config.Host = "THE_GAME_HOST"
+	auth := context.WithValue(
+		context.Background(),
+		game.ContextAccessToken, "YOUR_BEARER_TOKEN",
+	)
+	client := game.NewAPIClient(config)
+	lineResp, netResp, err := client.GameApi.GetPlayer(auth)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%v", lineResp)
+	fmt.Printf("%v", netResp)
+}
+```
+
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:3000/api*
+All URIs are relative to *https://GAME-API-ENDPOINT/api*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
